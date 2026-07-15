@@ -6,7 +6,7 @@ const API_BASE_URL = (function () {
     ) {
         return 'http://127.0.0.1:5000';
     }
-    return 'https://your-backend.onrender.com';
+    return 'https://tic-tac-toe-d3sx.onrender.com';
 })();
 
 const state = {

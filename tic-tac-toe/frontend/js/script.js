@@ -9,6 +9,9 @@ const API_BASE_URL = (function () {
     return 'https://tic-tac-toe-d3sx.onrender.com';
 })();
 
+const FETCH_TIMEOUT_MS = 20000;
+const RETRY_MAX = 3;
+
 const state = {
     gameId: null,
     board: null,
@@ -42,16 +45,34 @@ function apiUrl(path) {
     return API_BASE_URL + path;
 }
 
-async function createNewGame() {
+async function fetchWithTimeout(url, options) {
+    const controller = new AbortController();
+    const timer = setTimeout(function () {
+        controller.abort();
+    }, FETCH_TIMEOUT_MS);
     try {
-        const res = await fetch(apiUrl('/api/new-game'));
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        return await res.json();
-    } catch (err) {
-        console.error('Failed to create game:', err);
-        showError('Failed to start game');
-        return null;
+        var res = await fetch(url, Object.assign({}, options, { signal: controller.signal }));
+        return res;
+    } finally {
+        clearTimeout(timer);
     }
+}
+
+async function createNewGame() {
+    for (var attempt = 1; attempt <= RETRY_MAX; attempt++) {
+        try {
+            var res = await fetchWithTimeout(apiUrl('/api/new-game'));
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return await res.json();
+        } catch (err) {
+            console.error('Failed to create game (attempt ' + attempt + '):', err);
+            if (attempt < RETRY_MAX) {
+                await new Promise(function (r) { setTimeout(r, 1000 * attempt); });
+            }
+        }
+    }
+    showError('Failed to start game. Please refresh the page.');
+    return null;
 }
 
 async function sendMove(row, col) {
@@ -62,7 +83,7 @@ async function sendMove(row, col) {
     }
     try {
         var body = JSON.stringify({ gameId: state.gameId, row: row, col: col });
-        var res = await fetch(apiUrl('/api/move'), {
+        var res = await fetchWithTimeout(apiUrl('/api/move'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: body
@@ -71,7 +92,7 @@ async function sendMove(row, col) {
         return await res.json();
     } catch (err) {
         console.error('Failed to send move:', err);
-        showError('Failed to send move');
+        showError('Failed to send move. Try again.');
         return null;
     }
 }
@@ -80,6 +101,7 @@ async function ensureGameId() {
     if (!state.gameId) {
         var game = await createNewGame();
         if (game) {
+            clearError();
             updateUI(game);
         }
     }
@@ -88,9 +110,10 @@ async function ensureGameId() {
 
 async function sendRestart() {
     await ensureGameId();
+    clearError();
     try {
         var body = JSON.stringify({ gameId: state.gameId });
-        var res = await fetch(apiUrl('/api/restart'), {
+        var res = await fetchWithTimeout(apiUrl('/api/restart'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: body
@@ -106,9 +129,10 @@ async function sendRestart() {
 
 async function sendResetScores() {
     await ensureGameId();
+    clearError();
     try {
         var body = JSON.stringify({ gameId: state.gameId });
-        var res = await fetch(apiUrl('/api/reset-scores'), {
+        var res = await fetchWithTimeout(apiUrl('/api/reset-scores'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: body
@@ -124,9 +148,10 @@ async function sendResetScores() {
 
 async function sendSetMode(mode) {
     await ensureGameId();
+    clearError();
     try {
         var body = JSON.stringify({ gameId: state.gameId, mode: mode });
-        var res = await fetch(apiUrl('/api/mode'), {
+        var res = await fetchWithTimeout(apiUrl('/api/mode'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: body
@@ -145,12 +170,12 @@ function showError(message) {
     msg.className = 'status-message';
     msg.textContent = message;
     msg.style.color = '#e74c3c';
-    setTimeout(() => {
-        if (msg.textContent === message) {
-            msg.style.color = '';
-            renderStatus();
-        }
-    }, 3000);
+}
+
+function clearError() {
+    const msg = elements.statusMessage;
+    msg.style.color = '';
+    renderStatus();
 }
 
 function updateUI(data) {
@@ -206,7 +231,6 @@ function renderBoard() {
 function renderStatus() {
     const msg = elements.statusMessage;
     msg.className = 'status-message';
-    msg.style.color = '';
 
     if (state.gameOver) {
         if (state.winner) {
@@ -253,6 +277,11 @@ function setLoading(loading) {
 async function handleCellClick(e) {
     if (state.isProcessing) return;
 
+    if (!state.board || !state.gameId) {
+        await ensureGameId();
+        if (!state.board) return;
+    }
+
     var cell = e.currentTarget;
 
     if (state.gameOver) return;
@@ -277,6 +306,7 @@ async function handleCellClick(e) {
     }
 
     if (data && !data.error) {
+        clearError();
         updateUI(data);
     }
 }
@@ -284,6 +314,7 @@ async function handleCellClick(e) {
 async function handleRestart() {
     var data = await sendRestart();
     if (data) {
+        clearError();
         updateUI(data);
     }
 }
@@ -291,6 +322,7 @@ async function handleRestart() {
 async function handleResetScores() {
     var data = await sendResetScores();
     if (data) {
+        clearError();
         updateUI(data);
     }
 }
@@ -303,6 +335,7 @@ async function handleModeChange(e) {
 
     var data = await sendSetMode(mode);
     if (data) {
+        clearError();
         updateUI(data);
     }
 }
@@ -319,6 +352,7 @@ function init() {
 
     createNewGame().then(function (data) {
         if (data) {
+            clearError();
             updateUI(data);
         }
     });

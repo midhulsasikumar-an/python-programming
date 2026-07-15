@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="title">Tic Tac Toe</h1>
+            <div class="mode-selector">
+                <button id="mode-pvp" class="mode-btn active" data-mode="pvp">Player vs Player</button>
+                <button id="mode-pvc" class="mode-btn" data-mode="pvc">vs Computer</button>
+            </div>
+            <div class="status-area">
+                <p id="status-message" class="status-message">Player X's Turn</p>
+                <p id="move-counter" class="move-counter">Moves: 0</p>
+            </div>
+        </header>
+
+        <main>
+            <div id="loading-overlay" class="loading-overlay hidden">
+                <div class="spinner"></div>
+                <p class="loading-text">Computer thinking...</p>
+            </div>
+            <div class="board" id="board">
+                <div class="cell" data-row="0" data-col="0"></div>
+                <div class="cell" data-row="0" data-col="1"></div>
+                <div class="cell" data-row="0" data-col="2"></div>
+                <div class="cell" data-row="1" data-col="0"></div>
+                <div class="cell" data-row="1" data-col="1"></div>
+                <div class="cell" data-row="1" data-col="2"></div>
+                <div class="cell" data-row="2" data-col="0"></div>
+                <div class="cell" data-row="2" data-col="1"></div>
+                <div class="cell" data-row="2" data-col="2"></div>
+            </div>
+        </main>
+
+        <section class="scoreboard">
+            <h2 class="scoreboard-title">Scoreboard</h2>
+            <div class="scores">
+                <div class="score-item score-x">
+                    <span class="score-label">Player X</span>
+                    <span id="score-x" class="score-value">0</span>
+                </div>
+                <div class="score-item score-draw">
+                    <span class="score-label">Draws</span>
+                    <span id="score-draw" class="score-value">0</span>
+                </div>
+                <div class="score-item score-o">
+                    <span class="score-label">Player O</span>
+                    <span id="score-o" class="score-value">0</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="actions">
+            <button id="restart-btn" class="btn btn-restart">Restart Game</button>
+            <button id="reset-scores-btn" class="btn btn-reset">Reset Scoreboard</button>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

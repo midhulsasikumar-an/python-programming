@@ -27,7 +27,8 @@ def respond(game, game_id):
 
 @app.route('/api/new-game', methods=['GET'])
 def new_game():
-    game = TicTacToeGame()
+    difficulty = request.args.get('difficulty', 'hard')
+    game = TicTacToeGame(difficulty=difficulty)
     game_id = str(uuid.uuid4())
     games[game_id] = game
     return respond(game, game_id)
@@ -67,12 +68,15 @@ def set_mode():
     data = request.get_json()
     game_id = data.get('gameId', '')
     mode = data.get('mode')
+    difficulty = data.get('difficulty')
 
     if mode not in ('pvp', 'pvc'):
         return jsonify({'error': 'Invalid mode'}), 400
 
     game, gid = get_or_create_game(game_id)
     game.mode = mode
+    if difficulty:
+        game.difficulty = difficulty
     game.reset()
     return respond(game, gid)
 
@@ -85,9 +89,19 @@ def restart():
     game, gid = get_or_create_game(game_id)
     scores = game.scores
     mode = game.mode
+    difficulty = game.difficulty
+    games_played = game.games_played
+    move_times = game.move_times
+    all_qualities = game.all_qualities
+
     game.reset()
+
     game.scores = scores
     game.mode = mode
+    game.difficulty = difficulty
+    game.games_played = games_played
+    game.move_times = move_times
+    game.all_qualities = all_qualities
     return respond(game, gid)
 
 
@@ -98,9 +112,14 @@ def reset_scores():
 
     game, gid = get_or_create_game(game_id)
     mode = game.mode
-    game.reset()
+    difficulty = game.difficulty
+    game.reset(keep_stats=True)
     game.scores = {'x': 0, 'o': 0, 'draw': 0}
     game.mode = mode
+    game.difficulty = difficulty
+    game.games_played = 0
+    game.move_times = {'x': [], 'o': []}
+    game.all_qualities = []
     return respond(game, gid)
 
 

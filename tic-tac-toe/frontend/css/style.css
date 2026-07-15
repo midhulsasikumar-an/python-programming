@@ -384,6 +384,164 @@ main {
     border-color: rgba(255, 255, 255, 0.15);
 }
 
+.coach-message {
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--accent-blue);
+    margin-bottom: 1rem;
+    min-height: 1.4rem;
+    padding: 0.5rem;
+    background: var(--bg-card);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    transition: opacity var(--transition);
+}
+
+.coach-message.hidden {
+    display: none;
+}
+
+.game-layout {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 840px;
+    margin: 0 auto;
+}
+
+.game-center {
+    flex: 0 0 auto;
+}
+
+.panel {
+    width: 170px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 0.5rem;
+}
+
+.panel-section {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.75rem;
+}
+
+.panel-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.difficulty-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.diff-btn {
+    padding: 0.35rem 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition);
+    font-family: inherit;
+}
+
+.diff-btn:hover {
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.diff-btn.active {
+    background: var(--accent-x);
+    color: #fff;
+    border-color: var(--accent-x);
+}
+
+.timer-display {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+}
+
+.quality-display {
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.3rem 0;
+    min-height: 1.8rem;
+}
+
+.quality-display.excellent {
+    color: var(--accent-win);
+}
+
+.quality-display.good {
+    color: var(--accent-draw);
+}
+
+.quality-display.mistake {
+    color: var(--accent-o);
+}
+
+.stats-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.stat-value {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.skill-badge {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0.5rem 0;
+}
+
+.skill-badge.beginner {
+    color: var(--text-secondary);
+}
+
+.skill-badge.intermediate {
+    color: var(--accent-draw);
+}
+
+.skill-badge.advanced {
+    color: var(--accent-win);
+}
+
 @media (max-width: 480px) {
     .container {
         padding: 1.25rem 1rem;
@@ -404,5 +562,11 @@ main {
 
     .actions {
         flex-direction: column;
+    }
+}
+
+@media (max-width: 768px) {
+    .panel {
+        display: none;
     }
 }

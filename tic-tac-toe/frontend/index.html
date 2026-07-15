@@ -7,59 +7,125 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1 class="title">Tic Tac Toe</h1>
-            <div class="mode-selector">
-                <button id="mode-pvp" class="mode-btn active" data-mode="pvp">Player vs Player</button>
-                <button id="mode-pvc" class="mode-btn" data-mode="pvc">vs Computer</button>
-            </div>
-            <div class="status-area">
-                <p id="status-message" class="status-message">Player X's Turn</p>
-                <p id="move-counter" class="move-counter">Moves: 0</p>
-            </div>
-        </header>
-
-        <main>
-            <div id="loading-overlay" class="loading-overlay hidden">
-                <div class="spinner"></div>
-                <p class="loading-text">Computer thinking...</p>
-            </div>
-            <div class="board" id="board">
-                <div class="cell" data-row="0" data-col="0"></div>
-                <div class="cell" data-row="0" data-col="1"></div>
-                <div class="cell" data-row="0" data-col="2"></div>
-                <div class="cell" data-row="1" data-col="0"></div>
-                <div class="cell" data-row="1" data-col="1"></div>
-                <div class="cell" data-row="1" data-col="2"></div>
-                <div class="cell" data-row="2" data-col="0"></div>
-                <div class="cell" data-row="2" data-col="1"></div>
-                <div class="cell" data-row="2" data-col="2"></div>
-            </div>
-        </main>
-
-        <section class="scoreboard">
-            <h2 class="scoreboard-title">Scoreboard</h2>
-            <div class="scores">
-                <div class="score-item score-x">
-                    <span class="score-label">Player X</span>
-                    <span id="score-x" class="score-value">0</span>
-                </div>
-                <div class="score-item score-draw">
-                    <span class="score-label">Draws</span>
-                    <span id="score-draw" class="score-value">0</span>
-                </div>
-                <div class="score-item score-o">
-                    <span class="score-label">Player O</span>
-                    <span id="score-o" class="score-value">0</span>
+    <div class="game-layout">
+        <aside class="panel panel-left">
+            <div class="panel-section">
+                <h3 class="panel-title">Difficulty</h3>
+                <div class="difficulty-selector">
+                    <button class="diff-btn" data-difficulty="easy">Easy</button>
+                    <button class="diff-btn" data-difficulty="medium">Medium</button>
+                    <button class="diff-btn active" data-difficulty="hard">Hard</button>
                 </div>
             </div>
-        </section>
 
-        <div class="actions">
-            <button id="restart-btn" class="btn btn-restart">Restart Game</button>
-            <button id="reset-scores-btn" class="btn btn-reset">Reset Scoreboard</button>
+            <div class="panel-section">
+                <h3 class="panel-title">Timer</h3>
+                <div class="timer-display">
+                    <span id="timer-value">00:00</span>
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <h3 class="panel-title">Move Quality</h3>
+                <div id="move-quality" class="quality-display">—</div>
+            </div>
+        </aside>
+
+        <div class="game-center">
+            <div class="container">
+                <header>
+                    <h1 class="title">Tic Tac Toe</h1>
+                    <div class="mode-selector">
+                        <button id="mode-pvp" class="mode-btn active" data-mode="pvp">Player vs Player</button>
+                        <button id="mode-pvc" class="mode-btn" data-mode="pvc">vs Computer</button>
+                    </div>
+                    <div class="status-area">
+                        <p id="status-message" class="status-message">Player X's Turn</p>
+                        <p id="move-counter" class="move-counter">Moves: 0</p>
+                    </div>
+                </header>
+
+                <main>
+                    <div id="loading-overlay" class="loading-overlay hidden">
+                        <div class="spinner"></div>
+                        <p class="loading-text">Computer thinking...</p>
+                    </div>
+                    <div class="board" id="board">
+                        <div class="cell" data-row="0" data-col="0"></div>
+                        <div class="cell" data-row="0" data-col="1"></div>
+                        <div class="cell" data-row="0" data-col="2"></div>
+                        <div class="cell" data-row="1" data-col="0"></div>
+                        <div class="cell" data-row="1" data-col="1"></div>
+                        <div class="cell" data-row="1" data-col="2"></div>
+                        <div class="cell" data-row="2" data-col="0"></div>
+                        <div class="cell" data-row="2" data-col="1"></div>
+                        <div class="cell" data-row="2" data-col="2"></div>
+                    </div>
+                </main>
+
+                <div id="coach-message" class="coach-message hidden"></div>
+
+                <section class="scoreboard">
+                    <h2 class="scoreboard-title">Scoreboard</h2>
+                    <div class="scores">
+                        <div class="score-item score-x">
+                            <span class="score-label">Player X</span>
+                            <span id="score-x" class="score-value">0</span>
+                        </div>
+                        <div class="score-item score-draw">
+                            <span class="score-label">Draws</span>
+                            <span id="score-draw" class="score-value">0</span>
+                        </div>
+                        <div class="score-item score-o">
+                            <span class="score-label">Player O</span>
+                            <span id="score-o" class="score-value">0</span>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="actions">
+                    <button id="restart-btn" class="btn btn-restart">Restart Game</button>
+                    <button id="reset-scores-btn" class="btn btn-reset">Reset Scoreboard</button>
+                </div>
+            </div>
         </div>
+
+        <aside class="panel panel-right">
+            <div class="panel-section">
+                <h3 class="panel-title">Statistics</h3>
+                <div class="stats-list">
+                    <div class="stat-row">
+                        <span class="stat-label">Games</span>
+                        <span id="stat-games" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Wins</span>
+                        <span id="stat-wins" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Losses</span>
+                        <span id="stat-losses" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Draws</span>
+                        <span id="stat-draws" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Win Rate</span>
+                        <span id="stat-winrate" class="stat-value">0%</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Avg Time</span>
+                        <span id="stat-avgtime" class="stat-value">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <h3 class="panel-title">Skill</h3>
+                <div id="skill-badge" class="skill-badge">Beginner</div>
+            </div>
+        </aside>
     </div>
 
     <script src="js/script.js"></script>

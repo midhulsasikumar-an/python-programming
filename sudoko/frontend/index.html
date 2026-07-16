@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app">
+        <aside class="panel panel-left">
+            <div class="panel-section">
+                <h3 class="panel-title">Difficulty</h3>
+                <div class="difficulty-selector">
+                    <button class="diff-btn active" data-difficulty="easy">Easy</button>
+                    <button class="diff-btn" data-difficulty="medium">Medium</button>
+                    <button class="diff-btn" data-difficulty="hard">Hard</button>
+                </div>
+            </div>
+            <div class="panel-section">
+                <h3 class="panel-title">Timer</h3>
+                <div class="timer-display">
+                    <span id="timer-value">00:00</span>
+                </div>
+            </div>
+            <div class="panel-section">
+                <h3 class="panel-title">Mistakes</h3>
+                <div class="mistakes-display">
+                    <span id="mistakes-value">0</span>
+                </div>
+            </div>
+        </aside>
+
+        <div class="game-center">
+            <header>
+                <h1 class="title">Sudoku</h1>
+                <p id="status-message" class="status-message">Loading...</p>
+            </header>
+
+            <main>
+                <div id="loading-overlay" class="loading-overlay hidden">
+                    <div class="spinner"></div>
+                </div>
+                <div class="board" id="board"></div>
+                <div class="numpad" id="numpad">
+                    <button class="num-btn" data-value="1">1</button>
+                    <button class="num-btn" data-value="2">2</button>
+                    <button class="num-btn" data-value="3">3</button>
+                    <button class="num-btn" data-value="4">4</button>
+                    <button class="num-btn" data-value="5">5</button>
+                    <button class="num-btn" data-value="6">6</button>
+                    <button class="num-btn" data-value="7">7</button>
+                    <button class="num-btn" data-value="8">8</button>
+                    <button class="num-btn" data-value="9">9</button>
+                    <button class="num-btn num-btn-erase" data-value="0">Erase</button>
+                </div>
+            </main>
+
+            <div class="actions">
+                <button id="new-game-btn" class="btn btn-primary">New Game</button>
+                <button id="check-btn" class="btn btn-secondary">Check</button>
+                <button id="solve-btn" class="btn btn-secondary">Solve</button>
+                <button id="reset-btn" class="btn btn-secondary">Reset</button>
+            </div>
+        </div>
+
+        <aside class="panel panel-right">
+            <div class="panel-section">
+                <h3 class="panel-title">How to Play</h3>
+                <ul class="instructions">
+                    <li>Fill the 9&times;9 grid so that each row, column, and 3&times;3 box contains the digits 1&ndash;9.</li>
+                    <li>Click a cell, then enter a number using the numpad or keyboard.</li>
+                    <li>Use <strong>Check</strong> to highlight incorrect entries.</li>
+                    <li>Use <strong>Solve</strong> to see the answer.</li>
+                    <li>Use <strong>Reset</strong> to clear your entries.</li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+    <div id="completion-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Puzzle Complete!</h2>
+            <p id="completion-time"></p>
+            <button id="modal-new-game" class="btn btn-primary">New Game</button>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from solver import generate_puzzle, solve_sudoku, find_conflicts, is_complete
@@ -73,5 +74,5 @@ def server_error(e):
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',
-        port=int(5000)
+        port=int(os.environ.get('PORT', 5000))
     )

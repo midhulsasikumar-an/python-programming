@@ -1,10 +1,27 @@
 import os
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 from solver import generate_puzzle, solve_sudoku, find_conflicts, is_complete
 
 app = Flask(__name__)
 CORS(app)
+
+FRONTEND_DIR = os.path.join(os.path.dirname(__file__), '..', 'frontend')
+
+
+@app.route('/')
+def serve_index():
+    return send_from_directory(FRONTEND_DIR, 'index.html')
+
+
+@app.route('/css/<path:filename>')
+def serve_css(filename):
+    return send_from_directory(os.path.join(FRONTEND_DIR, 'css'), filename)
+
+
+@app.route('/js/<path:filename>')
+def serve_js(filename):
+    return send_from_directory(os.path.join(FRONTEND_DIR, 'js'), filename)
 
 
 def board_from_request(data):
